@@ -39,17 +39,17 @@ This is a **configurable agent platform**:
 
 The included demo configures an agent with real database access to handle customer support queries — looking up orders, cancelling orders, requesting refunds, and updating shipping addresses.
 
-### Chat Transcript (with tool calls visible)
-
-The history view shows the full turn-by-turn transcript including which tools were called, what they returned, and how Claude used the results to respond.
-
-![Transcript](project_screenshorts/image-2-chat-transcript.png)
-
 ### Agent Configuration
 
 Configure any agent via UI — set the model (Opus, Sonnet, Haiku), write a system prompt, and assign tools from the registered tool library.
 
 ![Configuration](project_screenshorts/image-3-configuration.png)
+
+### Chat Transcript (with tool calls visible)
+
+The history view shows the full turn-by-turn transcript including which tools were called, what they returned, and how Claude used the results to respond.
+
+![Transcript](project_screenshorts/image-2-chat-transcript.png)
 
 ### Usage & Metrics
 
