@@ -1,12 +1,15 @@
 # Agent Control Plane
 
-![Chat](project_screenshorts/image-1-user-chat.png)
+> Give Claude (AI agent) structured, safe access to your database through tools you define and control.
 
-Give Claude (AI agent) structured, safe access to your database through tools you define and control.
+![Chat](project_screenshorts/image-1-user-chat.png)
 
 ---
 
-## Why This Is Not Just Another Chatbot
+<details>
+<summary><strong>🤔 Why This Is Not Just Another Chatbot</strong></summary>
+
+<br>
 
 Most chatbots are stateless text boxes wired to an LLM.
 
@@ -19,9 +22,16 @@ This is a **configurable agent platform**:
 - **Built-in observability** — every run logs input tokens, output tokens, and latency per API call. Token costs and response times are captured automatically because all calls go through one runner.
 - **Auto-generated tool schemas** — add `@register_tool` to any Python function and it's instantly available to any agent. Anthropic-compatible JSON schema is generated from type hints — no manual JSON writing.
 
+> 👇 See the **Demo** section below for screenshots of the chat, transcript, configuration, and usage dashboard in action.
+
+</details>
+
 ---
 
-## Demo — E-commerce Customer Support Agent
+<details>
+<summary><strong>🛍️ Demo — E-commerce Customer Support Agent</strong></summary>
+
+<br>
 
 The included demo configures an agent with real database access to handle customer support queries — looking up orders, cancelling orders, requesting refunds, and updating shipping addresses.
 
@@ -31,15 +41,11 @@ The history view shows the full turn-by-turn transcript including which tools we
 
 ![Transcript](project_screenshorts/image-2-chat-transcript.png)
 
----
-
 ### Agent Configuration
 
 Configure any agent via UI — set the model (Opus, Sonnet, Haiku), write a system prompt, and assign tools from the registered tool library.
 
 ![Configuration](project_screenshorts/image-3-configuration.png)
-
----
 
 ### Usage & Metrics
 
@@ -47,9 +53,14 @@ Per-run logs track model used, input tokens, output tokens, and latency. Aggrega
 
 ![Usage](project_screenshorts/image-4-usage.png)
 
+</details>
+
 ---
 
-## How It Works
+<details>
+<summary><strong>⚙️ How It Works</strong></summary>
+
+<br>
 
 ```
 Developer configures an agent (model + system prompt + tools) via UI
@@ -65,20 +76,14 @@ Backend runs the agentic loop (Anthropic SDK)
 Full turn-by-turn history + token/latency logs saved to DB
 ```
 
----
-
-## Stack
-
-| Layer | Tech |
-|---|---|
-| Backend | Django 5.0 + Django REST Framework |
-| Database | PostgreSQL |
-| AI | Anthropic Python SDK (`claude-sonnet-4-6`) |
-| Frontend | React |
+</details>
 
 ---
 
-## Project Structure
+<details>
+<summary><strong>🗂️ Project Structure</strong></summary>
+
+<br>
 
 ```
 backend/
@@ -89,8 +94,24 @@ backend/
 frontend/        # React UI
 ```
 
+</details>
+
 ---
 
-## Backend Docs
+<details>
+<summary><strong>🛠️ Stack</strong></summary>
 
-See [backend/readme.md](backend/readme.md) for setup instructions and full API reference.
+<br>
+
+| Layer | Tech |
+|---|---|
+| Backend | Django 5.0 + Django REST Framework |
+| Database | PostgreSQL |
+| AI | Anthropic Python SDK (`claude-sonnet-4-6`) |
+| Frontend | React |
+
+</details>
+
+---
+
+📖 See [backend/readme.md](backend/readme.md) for setup instructions and full API reference.
