@@ -1,6 +1,10 @@
 # Agent Control Plane
 
-> Give Claude (AI agent) structured, safe access to your database through tools you define and control.
+### A platform to build, configure, and run AI agents — not a chatbot.
+
+You define the agent. You define the tools. Claude does the rest.
+
+> Point any agent at your database. Give it tools to read, write, cancel, refund — whatever your domain needs. The e-commerce demo below is just one example of what you can build in minutes.
 
 ![Chat](project_screenshorts/image-1-user-chat.png)
 
