@@ -1,0 +1,382 @@
+{
+  "info": {
+    "name": "Agent Control Plane",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "agent_slug",
+      "value": "ecommerce-support",
+      "type": "string"
+    },
+    {
+      "key": "session_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Tools",
+      "item": [
+        {
+          "name": "List Tools",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/tools/",
+            "description": "Returns all registered tools. Use the IDs when creating or updating an agent."
+          },
+          "response_example": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "name": "get_customer_orders",
+                "description": "Fetch all orders for a customer by email.",
+                "parameters_schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_email": { "type": "string" }
+                  },
+                  "required": ["customer_email"]
+                },
+                "is_active": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "Sync Tools",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/tools/sync/",
+            "description": "Scans @register_tool functions in code and upserts them into the DB. Run once after server setup or after adding new tools."
+          },
+          "response_example": {
+            "status": 200,
+            "body": {
+              "synced": [
+                "get_customer_orders",
+                "get_order_details",
+                "cancel_order",
+                "request_refund",
+                "update_shipping_address"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agents",
+      "item": [
+        {
+          "name": "List Agents",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/agents/",
+            "description": "Returns all agents with their assigned tools."
+          },
+          "response_example": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "slug": "ecommerce-support",
+                "display_name": "E-commerce Support",
+                "model": "claude-sonnet-4-6",
+                "system_prompt": "You are a helpful customer support agent...",
+                "description": "",
+                "tools": [
+                  {
+                    "id": 1,
+                    "name": "get_customer_orders",
+                    "description": "Fetch all orders for a customer by email."
+                  }
+                ],
+                "created_at": "2026-06-06T10:00:00Z",
+                "updated_at": "2026-06-06T10:00:00Z"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Create Agent",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/agents/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "slug": "ecommerce-support",
+                "display_name": "E-commerce Support",
+                "model": "claude-sonnet-4-6",
+                "system_prompt": "You are a helpful customer support agent. Use tools to look up orders, cancel orders, process refunds, and update shipping addresses.",
+                "description": "Handles e-commerce customer queries",
+                "tools": [1, 2, 3, 4, 5]
+              }
+            },
+            "description": "Create a new agent. 'tools' is an array of Tool IDs from GET /api/tools/. Model choices: claude-opus-4-8, claude-sonnet-4-6, claude-haiku-4-5-20251001."
+          },
+          "response_example": {
+            "status": 201,
+            "body": {
+              "id": 1,
+              "slug": "ecommerce-support",
+              "display_name": "E-commerce Support",
+              "model": "claude-sonnet-4-6",
+              "system_prompt": "You are a helpful customer support agent...",
+              "tools": [],
+              "created_at": "2026-06-06T10:00:00Z",
+              "updated_at": "2026-06-06T10:00:00Z"
+            }
+          }
+        },
+        {
+          "name": "Get Agent",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/agents/{{agent_slug}}/",
+            "description": "Get a single agent by slug with its full tool list."
+          },
+          "response_example": {
+            "status": 200,
+            "body": {
+              "id": 1,
+              "slug": "ecommerce-support",
+              "display_name": "E-commerce Support",
+              "model": "claude-sonnet-4-6",
+              "system_prompt": "You are a helpful customer support agent...",
+              "tools": [
+                { "id": 1, "name": "get_customer_orders", "description": "..." },
+                { "id": 2, "name": "cancel_order", "description": "..." }
+              ],
+              "created_at": "2026-06-06T10:00:00Z",
+              "updated_at": "2026-06-06T10:00:00Z"
+            }
+          }
+        },
+        {
+          "name": "Update Agent",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/agents/{{agent_slug}}/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "display_name": "E-commerce Support v2",
+                "model": "claude-opus-4-8",
+                "system_prompt": "Updated system prompt here.",
+                "tools": [1, 2]
+              }
+            },
+            "description": "Partial update — only send fields you want to change. Tools list replaces the existing assignment."
+          },
+          "response_example": {
+            "status": 200,
+            "body": {
+              "id": 1,
+              "slug": "ecommerce-support",
+              "display_name": "E-commerce Support v2",
+              "model": "claude-opus-4-8",
+              "tools": []
+            }
+          }
+        },
+        {
+          "name": "Delete Agent",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/agents/{{agent_slug}}/",
+            "description": "Permanently delete an agent and all its sessions."
+          },
+          "response_example": {
+            "status": 204,
+            "body": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Chat — New Session",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/agents/{{agent_slug}}/chat/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "message": "Hi, I am alice@example.com. Can you show me my orders?"
+              }
+            },
+            "description": "Start a new chat session. Returns a session_id — pass it in follow-up messages to continue the same conversation."
+          },
+          "response_example": {
+            "status": 200,
+            "body": {
+              "session_id": "598d7fc7-13e4-4c03-9b6c-9d59d453278f",
+              "reply": "Here are your orders, Alice! ..."
+            }
+          }
+        },
+        {
+          "name": "Chat — Continue Session",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/agents/{{agent_slug}}/chat/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "session_id": "{{session_id}}",
+                "message": "Can you cancel order #1?"
+              }
+            },
+            "description": "Continue an existing session. The agent has full memory of the conversation so far."
+          },
+          "response_example": {
+            "status": 200,
+            "body": {
+              "session_id": "598d7fc7-13e4-4c03-9b6c-9d59d453278f",
+              "reply": "Order #1 has been successfully cancelled."
+            }
+          }
+        },
+        {
+          "name": "List Sessions for Agent",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/agents/{{agent_slug}}/sessions/",
+            "description": "Returns all chat sessions for an agent, ordered newest first."
+          },
+          "response_example": {
+            "status": 200,
+            "body": [
+              {
+                "id": "598d7fc7-13e4-4c03-9b6c-9d59d453278f",
+                "agent": 1,
+                "created_at": "2026-06-06T10:00:00Z",
+                "messages": []
+              }
+            ]
+          }
+        },
+        {
+          "name": "Get Session Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/sessions/{{session_id}}/",
+            "description": "Returns full message history for a session. Roles: user, assistant, tool_result."
+          },
+          "response_example": {
+            "status": 200,
+            "body": {
+              "id": "598d7fc7-13e4-4c03-9b6c-9d59d453278f",
+              "agent": 1,
+              "created_at": "2026-06-06T10:00:00Z",
+              "messages": [
+                {
+                  "id": 1,
+                  "role": "user",
+                  "content": "Hi, I am alice@example.com. Can you show me my orders?",
+                  "tool_use_id": "",
+                  "created_at": "2026-06-06T10:00:01Z"
+                },
+                {
+                  "id": 2,
+                  "role": "assistant",
+                  "content": "[{\"type\": \"tool_use\", \"id\": \"toolu_xxx\", \"name\": \"get_customer_orders\", \"input\": {\"customer_email\": \"alice@example.com\"}}]",
+                  "tool_use_id": "",
+                  "created_at": "2026-06-06T10:00:02Z"
+                },
+                {
+                  "id": 3,
+                  "role": "tool_result",
+                  "content": "Order #1 — Running Shoes — Shipped ...",
+                  "tool_use_id": "toolu_xxx",
+                  "created_at": "2026-06-06T10:00:02Z"
+                },
+                {
+                  "id": 4,
+                  "role": "assistant",
+                  "content": "Here are your orders, Alice! ...",
+                  "tool_use_id": "",
+                  "created_at": "2026-06-06T10:00:03Z"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usage Logs",
+      "item": [
+        {
+          "name": "All Usage Logs",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/usage/",
+            "description": "Returns all usage logs ordered by newest first. Each log represents one full agent run (may include multiple API calls if tools were used)."
+          },
+          "response_example": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "agent": 1,
+                "session": "598d7fc7-13e4-4c03-9b6c-9d59d453278f",
+                "model_used": "claude-sonnet-4-6",
+                "input_tokens": 843,
+                "output_tokens": 201,
+                "latency_ms": 2341,
+                "created_at": "2026-06-06T10:00:03Z"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Usage Logs — Filter by Agent",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/usage/?agent={{agent_slug}}",
+            "description": "Filter usage logs for a specific agent."
+          },
+          "response_example": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "agent": 1,
+                "session": "598d7fc7-13e4-4c03-9b6c-9d59d453278f",
+                "model_used": "claude-sonnet-4-6",
+                "input_tokens": 843,
+                "output_tokens": 201,
+                "latency_ms": 2341,
+                "created_at": "2026-06-06T10:00:03Z"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
