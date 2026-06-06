@@ -32,7 +32,7 @@ This is a **configurable agent platform**:
 
 ---
 
-<details>
+<details open>
 <summary><strong>🛍️ Demo — E-commerce Customer Support Agent</strong></summary>
 
 <br>
