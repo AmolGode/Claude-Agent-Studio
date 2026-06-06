@@ -1,5 +1,11 @@
 # Agent Control Plane
 
+![Chat](project_screenshorts/image-1-user-chat.png)
+
+A developer platform to configure and run AI agents powered by Claude. Define agents with custom system prompts and tools, chat with them via API, and track token usage and latency — all managed through a clean REST backend.
+
+---
+
 ## Why This Is Not Just Another Chatbot
 
 Most chatbots are stateless text boxes wired to an LLM.
@@ -17,21 +23,7 @@ This is a **configurable agent platform**:
 
 ## Demo — E-commerce Customer Support Agent
 
-A developer platform to configure and run AI agents powered by Claude. Define agents with custom system prompts and tools, chat with them via API, and track token usage and latency — all managed through a clean REST backend.
-
----
-
-## Demo — E-commerce Customer Support Agent
-
 The included demo configures an agent with real database access to handle customer support queries — looking up orders, cancelling orders, requesting refunds, and updating shipping addresses.
-
-### Chat
-
-The agent identifies the customer by email, fetches live order data using tools, and handles multi-turn conversations with full memory.
-
-![Chat](project_screenshorts/image-1-user-chat.png)
-
----
 
 ### Chat Transcript (with tool calls visible)
 
