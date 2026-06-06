@@ -2,7 +2,7 @@
 
 ![Chat](project_screenshorts/image-1-user-chat.png)
 
-A developer platform to configure and run AI agents powered by Claude. Define agents with custom system prompts and tools, chat with them via API, and track token usage and latency — all managed through a clean REST backend.
+Give Claude (AI agent) structured, safe access to your database through tools you define and control.
 
 ---
 
