@@ -1,5 +1,22 @@
 # Agent Control Plane
 
+## Why This Is Not Just Another Chatbot
+
+Most chatbots are stateless text boxes wired to an LLM.
+
+This is a **configurable agent platform**:
+
+- **Real tool execution** — agents don't simulate actions, they run Python functions against a real database. Cancel an order? It's actually cancelled.
+- **Agentic loop** — Claude decides which tool to call, reads the result, and can chain multiple tool calls before responding. Not one-shot, not hardcoded.
+- **Centralized tool registry** — all tool calls flow through a single `call_tool()` entry point. This makes it trivial to add logging, auth checks, rate limiting, or usage tracking in one place — not scattered across every tool.
+- **Developer-first configuration** — agents are defined at runtime via UI (model, system prompt, tools). No code changes to spin up a new agent.
+- **Built-in observability** — every run logs input tokens, output tokens, and latency per API call. Token costs and response times are captured automatically because all calls go through one runner.
+- **Auto-generated tool schemas** — add `@register_tool` to any Python function and it's instantly available to any agent. Anthropic-compatible JSON schema is generated from type hints — no manual JSON writing.
+
+---
+
+## Demo — E-commerce Customer Support Agent
+
 A developer platform to configure and run AI agents powered by Claude. Define agents with custom system prompts and tools, chat with them via API, and track token usage and latency — all managed through a clean REST backend.
 
 ---
